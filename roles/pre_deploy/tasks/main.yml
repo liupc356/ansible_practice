@@ -1,0 +1,32 @@
+---
+# tasks file for pre_deploy
+- name: Create group of Ansible run user on managed hosts
+  ansible.builtin.group:
+    name: "{{ ansible_managed_user_group }}"
+    state: present
+
+- name: Create The Ansible Run User On Managed Hosts
+  ansible.builtin.user:
+    state: present
+    name: "{{ ansible_managed_user }}"
+    uid: "{{ ansible_managed_user_uid }}"
+    umask: "{{ ansible_managed_user_umask }}"
+    home: "/home/{{ ansible_managed_user }}"
+    group: "{{ ansible_managed_user_group }}"
+    shell: "{{ ansible_managed_user_shell }}"
+    password: "{{ lookup('file','/root/ansible_practice/ansible_managed_user_password') | password_hash }}"
+    password_expire_max: "{{ ansible_managed_user_maxdays }}"
+    password_expire_min: "{{ ansible_managed_user_mindays }}"
+    expires: -1
+
+- name: Configure Privilage of ansible_managed_user On Managed Hosts
+  ansible.builtin.lineinfile:
+    line: "{{ ansible_managed_user }} ALL=(ALL) NOPASSWD: ALL"
+    path: /etc/sudoers
+    state: present
+
+- name: Configure Non-Password Login/Add Pubkey to Managed Hosts
+  ansible.posix.authorized_key:
+    user: "{{ ansible_managed_user }}"
+    state: present
+    key: "{{ lookup('file',lookup('vars','ansible_managed_pubkey_path'),split_lines=False) }}"

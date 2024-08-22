@@ -1,0 +1,29 @@
+servers: 
+  hosts: 
+    controller: 
+      ansible_host: 192.168.70.13
+      ansible_connection: local
+    servera:
+      ansible_host: 192.168.70.14
+    serverb:
+      ansible_host: 192.168.70.15
+    serverc:
+      ansible_host: 192.168.70.16
+    serverd:
+      ansible_host: 192.168.70.17
+
+ansible_controller: 
+  hosts: 
+    controller: 
+
+lbservers: 
+  hosts: 
+    servera: 
+
+webservers: 
+  hosts: 
+    serverb: 
+    serverc: 
+
+monitorserver:
+  serverd:

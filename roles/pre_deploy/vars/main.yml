@@ -1,0 +1,10 @@
+---
+# vars file for pre_deploy
+ansible_managed_user: ansible
+ansible_managed_user_group: ansible
+ansible_managed_user_maxdays: 90
+ansible_managed_user_mindays: 1
+ansible_managed_pubkey_path: ~/.ssh/rsa_4096_key.pub
+ansible_managed_user_uid: 5000
+ansible_managed_user_umask: 0774
+ansible_managed_user_shell: /bin/bash

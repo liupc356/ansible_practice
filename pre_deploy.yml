@@ -1,0 +1,27 @@
+---
+- name: Configure The SSH On Managed Hosts 
+  hosts: controller
+  gather_facts: false
+  tasks:
+    - name: Get the RSA Fingerprint of All Managed Host
+      ansible.builtin.shell:
+        cmd: ssh-keyscan -t rsa "{{ hostvars[item]['ansible_host'] }}"
+      loop: "{{ groups['all'] }}"
+      register: managed_ssh_fingerprint
+
+    - name: Add Fingerprint of Managed Host to known_hosts On Controller
+      lineinfile:
+        create: true
+        path: ~/.ssh/known_hosts
+        line: "{{ item.stdout }}"
+        state: present
+      loop: 
+        "{{ managed_ssh_fingerprint.results }}"
+
+- name: Run pre_deploy Role
+  hosts: all
+  gather_facts: false
+  vars: 
+    ansible_user: root
+  roles:
+    - pre_deploy

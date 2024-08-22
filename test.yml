@@ -1,0 +1,9 @@
+---
+- name: test network state
+  hosts: all
+  gather_facts: true
+  tasks: 
+      - name: 
+        debug: 
+          var: hostvars[item]['ansible_host']
+        loop: "{{ groups['all'] }}" 
